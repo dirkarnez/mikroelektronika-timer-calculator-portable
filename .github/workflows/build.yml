@@ -21,7 +21,7 @@ jobs:
           cd 398_timer_calculator_v4.0.0.0 &&^
           7z.exe x 1468924105_timer_calculator_other_other.zip &&^
           7z.exe x Timer_Calculator_Build.4.0.0.exe -o"Timer_Calculator_Build.4.0.0" &&^
-          cd Timer_Calculator_Build.4.0. &&^
+          cd Timer_Calculator_Build.4.0.0 &&^
           rmdir /s /q $PLUGINSDIR &&^
           del /f  Uninstall.exe.nsis
           
