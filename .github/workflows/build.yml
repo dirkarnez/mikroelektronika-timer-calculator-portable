@@ -1,0 +1,40 @@
+name: portable-release-actions-workflow
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      - 'c*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      
+jobs:
+  build:
+    name: Create Release
+    runs-on: windows-latest
+    env:
+      targetZip: mikroelektronika-timer-calculator-portable-${{ github.ref_name }}.zip
+    steps:
+      - name: installer
+        shell: cmd
+        run: |
+          curl -L -O -J https://libstock.mikroe.com/projects/download/398/0/398_timer_calculator_v4.0.0.0.zip &&^
+          7z.exe x 398_timer_calculator_v4.0.0.0.zip &&^
+          cd 398_timer_calculator_v4.0.0.0 &&^
+          7z.exe x 1468924105_timer_calculator_other_other.zip &&^
+          7z.exe x Timer_Calculator_Build.4.0.0.exe -o"Timer_Calculator_Build.4.0.0" &&^
+          cd Timer_Calculator_Build.4.0. &&^
+          rmdir /s /q $PLUGINSDIR &&^
+          del /f  Uninstall.exe.nsis
+          
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          directory: "398_timer_calculator_v4.0.0.0/Timer_Calculator_Build.4.0.0"
+          filename: "${{ env.targetZip }}"
+          
+      - name: Release prebuilt
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "398_timer_calculator_v4.0.0.0/Timer_Calculator_Build.4.0.0/${{ env.targetZip }}"
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
